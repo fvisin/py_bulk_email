@@ -96,8 +96,11 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
 
         # Batch send emails
         to_email = ct[prim_email_f].encode('utf-8')
-        if to_email is None or to_email == '':
+        # If there is no primary email and secondary email field is set
+        if to_email in (None, '') and sec_email_f not in (None, ''):
             to_email = ct[sec_email_f].encode('utf-8')
+            if to_email is None or to_email == '':
+                continue
         msg['To'] = to_email
         mail.sendmail(from_email, to_email, msg.as_string())
 
