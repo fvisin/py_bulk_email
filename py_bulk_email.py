@@ -4,7 +4,7 @@ from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.utils import formatdate
+from email.utils import formatdate, make_msgid
 import os
 import smtplib
 
@@ -70,7 +70,9 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
 
     for ct in contacts:
         # Create message container
-        msg = MIMEMultipart('related')
+        msg = MIMEMultipart('related', 'utf-8')
+        msg['Message-ID'] = make_msgid()  # or you'll look like spam!
+        msg['Content-Type'] = 'text/html; charset=utf-8'
         msg['Subject'] = subject
         msg['From'] = from_email
         msg['Date'] = formatdate(localtime=True)
