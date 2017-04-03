@@ -50,7 +50,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
     prim_email_f = email_content['primary email field'].encode('utf-8').strip()
     sec_email_f = email_content['secondary email field'].encode(
         'utf-8').strip()
-
+    from_name = email_content['from'].encode('utf-8').strip()
     html = email_content['html'].encode('utf-8')
 
     from_email = account_info['email'].encode('utf-8').strip()
@@ -76,7 +76,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
         msg['Message-ID'] = make_msgid()  # or you'll look like spam!
         msg['Content-Type'] = 'text/html; charset=utf-8'
         msg['Subject'] = subject
-        msg['From'] = from_email
+        msg['From'] = from_name + ' <{}>'.format(from_email)
         msg['Date'] = formatdate(localtime=True)
         msg.preamble = 'This is a multi-part message in MIME format.'
 
