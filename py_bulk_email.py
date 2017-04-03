@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from email.mime.application import MIMEApplication
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
