@@ -29,6 +29,11 @@ def cols_to_dicts(lst):
     return out_lst
 
 
+def listdir_no_hidden(somepath):
+    return (el for el in os.listdir(somepath)
+            if not el.startswith('.'))
+
+
 def batch_send_email(xls='py_bulk_email.xlsx'):
     # Get data from xls
     try:
@@ -86,7 +91,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
         msg.attach(text)
 
         # Load attachments
-        for fname in os.listdir('attachments'):
+        for fname in listdir_no_hidden('attachments'):
             with open(os.path.join('attachments', fname), 'rb') as f:
                 part = MIMEApplication(f.read(), Name=fname)
                 part['Content-Disposition'] = ('attachment; filename="%s"'
@@ -94,7 +99,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
                 msg.attach(part)
 
         # Load images
-        for i, fname in enumerate(os.listdir('inline_images')):
+        for i, fname in enumerate(listdir_no_hidden('inline_images')):
             with open(os.path.join('inline_images', fname), 'rb') as f:
                 img = MIMEImage(f.read(), Name=fname)
                 img.add_header('Content-ID', '<image{}>'.format(i+1))
