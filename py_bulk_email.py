@@ -5,6 +5,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
+import time
 import os
 import smtplib
 
@@ -64,8 +65,9 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
         mail.ehlo_or_helo_if_needed()
         mail.starttls()
     except smtplib.SMTPServerDisconnected:
-        mail = smtplib.SMTP_SSL(smtp, port, timeout=5)
+        mail = smtplib.SMTP_SSL(smtp, port, timeout=15)
         mail.ehlo_or_helo_if_needed()
+    # mail.set_debuglevel(1)
     mail.login(username, password)
 
     for ct in contacts:
@@ -100,13 +102,16 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
 
         # Batch send emails
         to_email = ct[prim_email_f].encode('utf-8')
-        # If there is no primary email and secondary email field is set
-        if to_email in (None, '') and sec_email_f not in (None, ''):
-            to_email = ct[sec_email_f].encode('utf-8')
-            if to_email is None or to_email == '':
+        if to_email in (None, ''):
+            if sec_email_f not in (None, ''):
+                to_email = ct[sec_email_f].encode('utf-8')
+            else:
+                print('Account {} has no email set.'.format(ct))
                 continue
         msg['To'] = to_email
         mail.sendmail(from_email, to_email, msg.as_string())
+        print('Sent email to: {}'.format(to_email))
+        time.sleep(1)
 
     mail.quit()
 
