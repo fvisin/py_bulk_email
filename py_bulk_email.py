@@ -101,9 +101,13 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
         # Load images
         for i, fname in enumerate(listdir_no_hidden('inline_images')):
             with open(os.path.join('inline_images', fname), 'rb') as f:
-                img = MIMEImage(f.read(), Name=fname)
-                img.add_header('Content-ID', '<image{}>'.format(i+1))
-                msg.attach(img)
+                try:
+                    img = MIMEImage(f.read(), Name=fname)
+                except TypeError:
+                    img = MIMEImage(f.read(), Name=fname,
+                                    _subtype=os.path.splitext(fname))
+                    img.add_header('Content-ID', '<image{}>'.format(i+1))
+                    msg.attach(img)
 
         # Batch send emails
         to_email = ct[prim_email_f].encode('utf-8')
