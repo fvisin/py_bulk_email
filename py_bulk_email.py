@@ -136,7 +136,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
             mail.sendmail(from_email, to_email, msg.as_string())
 
         print('Sent email to: {}'.format(to_email))
-        time.sleep(1)
+        time.sleep(5)
 
     mail.quit()
 
