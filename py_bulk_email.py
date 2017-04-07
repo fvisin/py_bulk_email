@@ -78,8 +78,9 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
     for ct in contacts:
         # Create message container
         msg = MIMEMultipart('related', charset='utf-8')
-        msg['Message-ID'] = make_msgid()  # or you'll look like spam!
-        msg['Content-Type'] = 'text/html; charset=utf-8'
+        domain = from_email.split('@')[1]  # or you'll look like spam!
+        msg_id = make_msgid().split('@')[0] + '@' + domain + '>'
+        msg['Message-ID'] = msg_id
         msg['Subject'] = subject
         msg['From'] = from_name + ' <{}>'.format(from_email)
         msg['Date'] = formatdate(localtime=True)
