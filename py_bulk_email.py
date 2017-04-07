@@ -89,7 +89,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
 
         # Create the body of the message
         # Record the MIME type - text/html
-        text = MIMEText(html.format(**ct), 'html')
+        text = MIMEText(html.format(**ct), 'html', _charset='utf-8')
         msg.attach(text)
 
         # Load attachments
