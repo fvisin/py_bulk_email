@@ -83,6 +83,7 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
         msg['Message-ID'] = msg_id
         msg['Subject'] = subject
         msg['From'] = from_name + ' <{}>'.format(from_email)
+        msg['Reply-to'] = from_name + ' <{}>'.format(from_email)
         msg['Date'] = formatdate(localtime=True)
         msg.preamble = 'This is a multi-part message in MIME format.'
 
