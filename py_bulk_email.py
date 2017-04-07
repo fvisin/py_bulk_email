@@ -120,7 +120,21 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
                 print('Account {} has no email set.'.format(ct))
                 continue
         msg['To'] = to_email
-        mail.sendmail(from_email, to_email, msg.as_string())
+        try:
+            mail.sendmail(from_email, to_email, msg.as_string())
+        except smtplib.SMTPServerDisconnected:
+            print('Connection with SMTP lost. Trying to re-authenticate...')
+            try:
+                mail = smtplib.SMTP_SSL(smtp, port, timeout=15)
+                mail.ehlo_or_helo_if_needed()
+            except smtplib.SMTPServerDisconnected:
+                mail = smtplib.SMTP(smtp, port, timeout=5)
+                mail.ehlo_or_helo_if_needed()
+                mail.starttls()
+            # mail.set_debuglevel(1)
+            mail.login(username, password)
+            mail.sendmail(from_email, to_email, msg.as_string())
+
         print('Sent email to: {}'.format(to_email))
         time.sleep(1)
 
