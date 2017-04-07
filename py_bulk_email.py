@@ -66,12 +66,12 @@ def batch_send_email(xls='py_bulk_email.xlsx'):
 
     # Connect and authenticate
     try:
-        mail = smtplib.SMTP(smtp, port, timeout=5)
-        mail.ehlo_or_helo_if_needed()
-        mail.starttls()
-    except smtplib.SMTPServerDisconnected:
         mail = smtplib.SMTP_SSL(smtp, port, timeout=15)
         mail.ehlo_or_helo_if_needed()
+    except smtplib.SMTPServerDisconnected:
+        mail = smtplib.SMTP(smtp, port, timeout=15)
+        mail.ehlo_or_helo_if_needed()
+        mail.starttls()
     # mail.set_debuglevel(1)
     mail.login(username, password)
 
